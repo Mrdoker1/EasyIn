@@ -101,7 +101,7 @@
 }
 
 .mismatch__mailbox-cell:not(:first-child):hover {
-  background: linear-gradient(156deg, #3C5652 12.72%, #1F2324 87.29%);
+  background: #1D1E20;
 }
 
 .mismatch__mailbox-cell:first-child {
@@ -171,7 +171,7 @@
 }
 
 .mismatch__row:not(.mismatch__row--first):hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: #1D1E20;
   color: #FFFFFF;
 }
 
