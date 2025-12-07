@@ -22,33 +22,6 @@ const defaultOptions: MismatchOption[] = [
   { id: 'guy', label: 'Guy', color: '#60A5FA' },
 ];
 
-export const CollapsedDefault = {
-  args: {
-    label: 'First name',
-    options: defaultOptions,
-    selectedId: 'taylor',
-    isOpen: false,
-  },
-};
-
-export const ExpandedDefault = {
-  args: {
-    label: 'First name',
-    options: defaultOptions,
-    selectedId: 'taylor',
-    isOpen: true,
-  },
-};
-
-export const ExpandedSecondSelected = {
-  args: {
-    label: 'First name',
-    options: defaultOptions,
-    selectedId: 'chuck',
-    isOpen: true,
-  },
-};
-
 export const Interactive = {
   args: {
     label: 'First name',
@@ -75,5 +48,32 @@ export const Interactive = {
         }}
       />
     );
+  },
+};
+
+export const CollapsedDefault = {
+  args: {
+    label: 'First name',
+    options: defaultOptions,
+    selectedId: 'taylor',
+    isOpen: false,
+  },
+};
+
+export const ExpandedDefault = {
+  args: {
+    label: 'First name',
+    options: defaultOptions,
+    selectedId: 'taylor',
+    isOpen: true,
+  },
+};
+
+export const ExpandedSecondSelected = {
+  args: {
+    label: 'First name',
+    options: defaultOptions,
+    selectedId: 'chuck',
+    isOpen: true,
   },
 };

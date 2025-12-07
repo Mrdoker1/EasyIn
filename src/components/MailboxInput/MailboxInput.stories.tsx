@@ -36,6 +36,54 @@ const defaultOptions = [
   { id: 'extra', label: 'Extra' },
 ];
 
+export const Interactive = {
+  args: {
+    label: 'Email',
+    value: 'groupadmin@mail.com',
+    options: defaultOptions,
+    activeOptionId: 'linkedin',
+    isExpanded: false,
+  },
+  render: (args) => {
+    const optionValues = {
+      linkedin: 'groupadmin@mail.com',
+      domain: 'admin@company.com',
+      overflow: 'contact@overflow.io',
+      additional: 'info@additional.net',
+      another: 'hello@another.org',
+      custom: 'custom@email.com',
+      extra: 'extra@service.com',
+    };
+
+    const [state, setState] = React.useState({
+      value: args.value,
+      activeOptionId: args.activeOptionId,
+      isExpanded: args.isExpanded,
+    });
+
+    const handleOptionChange = (id) => {
+      setState({ 
+        ...state, 
+        activeOptionId: id,
+        value: optionValues[id] || state.value
+      });
+    };
+
+    return (
+      <MailboxInput
+        {...args}
+        value={state.value}
+        activeOptionId={state.activeOptionId}
+        isExpanded={state.isExpanded}
+        onChangeValue={(value) => setState({ ...state, value })}
+        onChangeActiveOption={handleOptionChange}
+        onToggleExpand={() => setState({ ...state, isExpanded: !state.isExpanded })}
+        onMenuClick={() => alert('Menu clicked!')}
+      />
+    );
+  },
+};
+
 export const DefaultCollapsed = {
   args: {
     label: 'Email',
@@ -101,53 +149,5 @@ export const EndOfList = {
         story: 'At the end of the list - right arrow is disabled.',
       },
     },
-  },
-};
-
-export const Interactive = {
-  args: {
-    label: 'Email',
-    value: 'groupadmin@mail.com',
-    options: defaultOptions,
-    activeOptionId: 'linkedin',
-    isExpanded: false,
-  },
-  render: (args) => {
-    const optionValues = {
-      linkedin: 'groupadmin@mail.com',
-      domain: 'admin@company.com',
-      overflow: 'contact@overflow.io',
-      additional: 'info@additional.net',
-      another: 'hello@another.org',
-      custom: 'custom@email.com',
-      extra: 'extra@service.com',
-    };
-
-    const [state, setState] = React.useState({
-      value: args.value,
-      activeOptionId: args.activeOptionId,
-      isExpanded: args.isExpanded,
-    });
-
-    const handleOptionChange = (id) => {
-      setState({ 
-        ...state, 
-        activeOptionId: id,
-        value: optionValues[id] || state.value
-      });
-    };
-
-    return (
-      <MailboxInput
-        {...args}
-        value={state.value}
-        activeOptionId={state.activeOptionId}
-        isExpanded={state.isExpanded}
-        onChangeValue={(value) => setState({ ...state, value })}
-        onChangeActiveOption={handleOptionChange}
-        onToggleExpand={() => setState({ ...state, isExpanded: !state.isExpanded })}
-        onMenuClick={() => alert('Menu clicked!')}
-      />
-    );
   },
 };

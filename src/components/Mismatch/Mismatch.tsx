@@ -64,8 +64,9 @@ export const Mismatch = ({
   const selectedOption = options.find((opt) => opt.id === selectedId) || options[0];
 
   const handleRowClick = (id: string) => {
-    if (id !== selectedId) {
-      onChange?.(id);
+    onChange?.(id);
+    if (id === selectedId) {
+      onToggleOpen?.();
     }
   };
 
