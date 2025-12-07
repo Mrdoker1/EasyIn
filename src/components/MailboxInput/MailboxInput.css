@@ -65,6 +65,10 @@
   background: rgba(45, 212, 191, 0.06);
 }
 
+.mailbox-input__icon-button--expanded .mailbox-input__icon {
+  opacity: 0.3;
+}
+
 .mailbox-input__icon {
   width: 24px;
   height: 24px;

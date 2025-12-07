@@ -83,7 +83,9 @@ export const MailboxInput = ({
         {/* Main row */}
         <div className="mailbox-input__main-row">
           <button 
-            className="mailbox-input__icon-button"
+            className={`mailbox-input__icon-button${
+              isExpanded ? ' mailbox-input__icon-button--expanded' : ''
+            }`}
             onClick={onToggleExpand}
             aria-label="Toggle mailbox options"
           >
