@@ -35,6 +35,7 @@
 
 .mismatch__container--expanded {
   background: #141414;
+  border: 1px solid #3A3C3E;
   border-radius: 12px;
 }
 

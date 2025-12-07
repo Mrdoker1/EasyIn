@@ -105,7 +105,7 @@ export const Mismatch = ({
               className={`mismatch__mailbox-cell ${
                 option.id === selectedId ? 'mismatch__mailbox-cell--selected' : ''
               }`}
-              onClick={index === 0 ? onToggleOpen : undefined}
+              onClick={index === 0 ? onToggleOpen : () => handleRowClick(option.id)}
             >
               {index === 0 ? (
                 <ChangeIcon className="mismatch__icon" />
@@ -122,7 +122,7 @@ export const Mismatch = ({
             <div
               key={option.id}
               className={`mismatch__row ${
-                index === 0 ? 'mismatch__row--first' : ''
+                index === 0 ? 'mismatch__row--first' : option.id === selectedId ? 'mismatch__row--selected' : ''
               } ${index < options.length - 1 ? 'mismatch__row--separator' : ''}`}
               onClick={() => handleRowClick(option.id)}
             >
