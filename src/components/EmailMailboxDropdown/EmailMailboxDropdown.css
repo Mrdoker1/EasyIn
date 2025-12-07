@@ -1,0 +1,288 @@
+/* Import base Mismatch styles - reuse all visual tokens */
+@import '../Mismatch/Mismatch.css';
+
+/* Component uses .email-mailbox prefix to avoid conflicts */
+.email-mailbox {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  width: 300px;
+}
+
+.email-mailbox__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.01em;
+}
+
+/* Container - always expanded */
+.email-mailbox__container {
+  display: grid;
+}
+
+.email-mailbox__container--collapsed {
+  grid-template-columns: 36px 1fr 26px;
+  background: #1D1E20;
+  border: 1px solid #3A3C3E;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+}
+
+.email-mailbox__container--collapsed:hover {
+  border-color: #4A4C4E;
+}
+
+.email-mailbox__container--expanded {
+  grid-template-columns: 36px 1fr;
+  background: #141414;
+  border: 1px solid #3A3C3E;
+  border-radius: 12px;
+}
+
+/* Mailbox Column - reuse Mismatch expanded column styles */
+.email-mailbox__mailbox-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.email-mailbox__mailbox-column--collapsed {
+  background: linear-gradient(
+    215deg,
+    rgba(76, 155, 141, 0.15) -61.92%,
+    rgba(76, 155, 141, 0) 123.07%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+}
+
+.email-mailbox__mailbox-column--collapsed:hover {
+  background: linear-gradient(
+    215deg,
+    rgba(76, 155, 141, 0.25) -61.92%,
+    rgba(76, 155, 141, 0.1) 123.07%
+  );
+}
+
+/* Input field for collapsed state */
+.email-mailbox__input {
+  flex: 1;
+  height: 38px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 400;
+  padding: 0 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.email-mailbox__input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.email-mailbox__mailbox-column--expanded {
+  background: linear-gradient(
+      0deg,
+      rgba(173, 178, 178, 0.06) 0%,
+      rgba(173, 178, 178, 0.06) 100%
+    ),
+    linear-gradient(
+      215deg,
+      rgba(76, 155, 141, 0.15) -61.92%,
+      rgba(76, 155, 141, 0) 123.07%
+    );
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  position: relative;
+}
+
+.email-mailbox__mailbox-column--expanded::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1.5px solid #39D0B5;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Mailbox Cell - reuse Mismatch cell structure */
+.email-mailbox__mailbox-cell {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms ease-out;
+  position: relative;
+  background: #3E5552;
+  cursor: pointer;
+}
+
+.email-mailbox__mailbox-cell:first-child {
+  border-top-left-radius: 10px;
+}
+
+.email-mailbox__mailbox-cell:last-child {
+  border-bottom-left-radius: 10px;
+}
+
+.email-mailbox__mailbox-cell:hover {
+  background: #1D1E20;
+}
+
+.email-mailbox__mailbox-cell--selected {
+  background: #1D1E20 !important;
+}
+
+.email-mailbox__mailbox-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 3px;
+  right: 3px;
+  height: 1px;
+  background: #3A3C3E;
+}
+
+/* Circle Avatar - NEW (replaces dots/icons) */
+.email-mailbox__avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 120ms ease-out;
+}
+
+.email-mailbox__avatar--selected {
+  background: #39D0B5;
+  color: #000000;
+}
+
+/* Content Column */
+.email-mailbox__content-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Row - reuse Mismatch row structure but with stacked content */
+.email-mailbox__row {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  padding-right: 14px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  position: relative;
+}
+
+.email-mailbox__row:first-child {
+  border-top-right-radius: 12px;
+}
+
+.email-mailbox__row:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+.email-mailbox__row--separator::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #3A3C3E;
+}
+
+.email-mailbox__row--selected {
+  background: #1D1E20;
+}
+
+.email-mailbox__row:not(.email-mailbox__row--selected):hover {
+  background: #1D1E20;
+}
+
+/* Collapsed state row */
+.email-mailbox__row--collapsed {
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Menu Button */
+.email-mailbox__menu-button {
+  width: 26px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-left: 1px solid #3C4041;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 120ms ease-out;
+  flex-shrink: 0;
+}
+
+.email-mailbox__menu-button:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.email-mailbox__menu-button svg {
+  flex-shrink: 0;
+}
+
+/* Row Content - NEW (two-line text layout) */
+.email-mailbox__row-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.email-mailbox__source {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-mailbox__email {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.email-mailbox__row--selected .email-mailbox__email {
+  color: #FFFFFF;
+}

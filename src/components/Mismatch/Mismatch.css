@@ -55,6 +55,16 @@
   align-items: center;
   justify-content: center;
   height: 38px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+}
+
+.mismatch__mailbox-column--collapsed:hover {
+  background: linear-gradient(
+    215deg,
+    rgba(76, 155, 141, 0.25) -61.92%,
+    rgba(76, 155, 141, 0.1) 123.07%
+  );
 }
 
 .mismatch__mailbox-column--expanded {
