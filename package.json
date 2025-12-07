@@ -21,8 +21,10 @@
     "@eslint/js": "^9.39.1",
     "@storybook/addon-a11y": "^10.1.4",
     "@storybook/addon-docs": "^10.1.4",
+    "@storybook/addon-themes": "^10.1.4",
     "@storybook/addon-vitest": "^10.1.4",
     "@storybook/react-vite": "^10.1.4",
+    "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
@@ -37,6 +39,7 @@
     "playwright": "^1.57.0",
     "prop-types": "^15.8.1",
     "storybook": "^10.1.4",
+    "typescript": "^5.9.3",
     "vite": "^7.2.4",
     "vitest": "^4.0.15"
   }

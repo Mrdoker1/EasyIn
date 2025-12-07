@@ -1,3 +1,5 @@
+import { themes } from 'storybook/theming';
+
 /** @type { import('@storybook/react-vite').Preview } */
 const preview = {
   parameters: {
@@ -13,7 +15,27 @@ const preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: "todo"
-    }
+    },
+
+    backgrounds: {
+      default: 'dark',
+      values: [
+        {
+          name: 'dark',
+          value: '#0a0a0a',
+        },
+        {
+          name: 'light',
+          value: '#ffffff',
+        },
+      ],
+    },
+    
+    layout: 'centered',
+
+    docs: {
+      theme: themes.dark,
+    },
   },
 };
 
