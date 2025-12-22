@@ -4,16 +4,23 @@ import { Mismatch, MismatchOption } from './Mismatch';
 export default {
   title: 'Components/Mismatch',
   component: Mismatch,
+
   parameters: {
     layout: 'centered',
     backgrounds: {
-      default: 'dark',
-      values: [
-        { name: 'dark', value: '#050607' },
-      ],
+      options: {
+        dark: { name: 'dark', value: '#050607' }
+      }
     },
   },
+
   tags: ['autodocs'],
+
+  globals: {
+    backgrounds: {
+      value: "dark"
+    }
+  }
 };
 
 const defaultOptions: MismatchOption[] = [

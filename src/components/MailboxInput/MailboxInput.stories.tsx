@@ -4,16 +4,18 @@ import { MailboxInput } from './MailboxInput';
 export default {
   title: 'Components/MailboxInput',
   component: MailboxInput,
+
   parameters: {
     layout: 'centered',
     backgrounds: {
-      default: 'dark',
-      values: [
-        { name: 'dark', value: '#050607' },
-      ],
+      options: {
+        dark: { name: 'dark', value: '#050607' }
+      }
     },
   },
+
   tags: ['autodocs'],
+
   argTypes: {
     width: {
       control: { type: 'text' },
@@ -24,6 +26,12 @@ export default {
       },
     },
   },
+
+  globals: {
+    backgrounds: {
+      value: "dark"
+    }
+  }
 };
 
 const defaultOptions = [

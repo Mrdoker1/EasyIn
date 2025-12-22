@@ -178,6 +178,11 @@
   color: #000000;
 }
 
+/* Primary email indicator */
+.email-mailbox__mailbox-cell--primary {
+  position: relative;
+}
+
 /* Content Column */
 .email-mailbox__content-column {
   display: flex;
@@ -285,4 +290,200 @@
 
 .email-mailbox__row--selected .email-mailbox__email {
   color: #FFFFFF;
+}
+
+/* Primary badge */
+.email-mailbox__primary-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #000000;
+  background: #39D0B5;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Row primary state */
+.email-mailbox__row--primary {
+  position: relative;
+}
+
+/* Muted state for bad/do-not-use emails */
+.email-mailbox__row--muted {
+  opacity: 0.5;
+}
+
+.email-mailbox__row--muted .email-mailbox__email {
+  text-decoration: line-through;
+}
+
+/* Row actions */
+.email-mailbox__row-actions {
+  position: static;
+  margin-left: auto;
+  padding-left: 8px;
+}
+
+.email-mailbox__action-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 120ms ease-out;
+  border-radius: 4px;
+  opacity: 0;
+}
+
+.email-mailbox__row:hover .email-mailbox__action-button {
+  opacity: 1;
+}
+
+.email-mailbox__action-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown menu */
+.email-mailbox__dropdown-menu {
+  position: fixed;
+  background: #1D1E20;
+  border: 1px solid #3A3C3E;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  min-width: 100px;
+  width: max-content;
+  max-width: 130px;
+  overflow: hidden;
+}
+
+.email-mailbox__menu-item {
+  width: 100%;
+  padding: 5px 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  border-bottom: 1px solid #3A3C3E;
+  white-space: nowrap;
+}
+
+.email-mailbox__menu-item:last-child {
+  border-bottom: none;
+}
+
+.email-mailbox__menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+
+.email-mailbox__menu-item--danger {
+  color: #F87171;
+}
+
+.email-mailbox__menu-item--danger:hover {
+  background: rgba(248, 113, 113, 0.1);
+  color: #FCA5A5;
+}
+
+.email-mailbox__menu-item--success {
+  color: #4ADE80;
+}
+
+.email-mailbox__menu-item--success:hover {
+  background: rgba(74, 222, 128, 0.1);
+  color: #86EFAC;
+}
+
+/* Add email row */
+.email-mailbox__row--add {
+  cursor: text;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.email-mailbox__row--add:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.email-mailbox__add-label {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.email-mailbox__add-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 0;
+}
+
+.email-mailbox__add-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Add email cell */
+.email-mailbox__mailbox-cell--add {
+  cursor: pointer;
+  background: #3E5552;
+}
+
+.email-mailbox__mailbox-cell--add:hover {
+  background: #1D1E20;
+}
+
+/* Toggle bad emails */
+.email-mailbox__row--toggle {
+  cursor: pointer;
+  background: transparent;
+}
+
+.email-mailbox__row--toggle:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.email-mailbox__toggle-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.email-mailbox__mailbox-cell--toggle {
+  cursor: pointer;
+  background: #3E5552;
+}
+
+.email-mailbox__mailbox-cell--toggle:hover {
+  background: #1D1E20;
+}
+
+.email-mailbox__mailbox-cell--toggle svg {
+  transition: transform 120ms ease-out;
+}
+
+.email-mailbox__mailbox-cell--toggle-open svg {
+  transform: rotate(180deg);
 }

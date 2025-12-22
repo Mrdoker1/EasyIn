@@ -18,17 +18,17 @@ const preview = {
     },
 
     backgrounds: {
-      default: 'dark',
-      values: [
-        {
+      options: {
+        dark: {
           name: 'dark',
           value: '#0a0a0a',
         },
-        {
+
+        light: {
           name: 'light',
           value: '#ffffff',
-        },
-      ],
+        }
+      }
     },
     
     layout: 'centered',
@@ -37,6 +37,12 @@ const preview = {
       theme: themes.dark,
     },
   },
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'dark'
+    }
+  }
 };
 
 export default preview;
