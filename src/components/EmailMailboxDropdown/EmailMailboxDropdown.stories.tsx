@@ -78,8 +78,18 @@ export const Interactive = {
         value={state.value}
         showBadEmails={state.showBadEmails}
         onChange={(id) => {
-          const option = state.options.find(opt => opt.id === id);
-          setState({ ...state, selectedId: id, isOpen: false, value: option?.email || state.value });
+          const updatedOptions = state.options.map(opt => ({
+            ...opt,
+            isPrimary: opt.id === id,
+          }));
+          const option = updatedOptions.find(opt => opt.id === id);
+          setState({ 
+            ...state, 
+            options: updatedOptions,
+            selectedId: id, 
+            isOpen: false, 
+            value: option?.email || state.value 
+          });
         }}
         onChangeValue={(value) => setState({ ...state, value })}
         onToggleOpen={() => setState({ ...state, isOpen: !state.isOpen })}

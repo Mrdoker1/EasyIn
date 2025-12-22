@@ -73,17 +73,12 @@ const StatusIcon = ({ status }: { status: EmailStatus }) => {
 };
 
 const BadEmailIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 4.5V9" stroke="#EF4444" strokeWidth="1.5" strokeLinecap="round"/>
-    <circle cx="8" cy="11.5" r="0.75" fill="#EF4444"/>
-  </svg>
-);
-
-const DoNotUseOverlay = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-    <circle cx="8" cy="8" r="6" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5"/>
-    <line x1="4" y1="4" x2="12" y2="12" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
+  <div className="email-mailbox__avatar email-mailbox__avatar--bad">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 2.5V5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="6" cy="8.5" r="1" fill="currentColor"/>
+    </svg>
+  </div>
 );
 
 export const EmailMailboxDropdown = ({
@@ -148,10 +143,9 @@ export const EmailMailboxDropdown = ({
   const badEmailsCount = options.filter(opt => opt.action === 'bad-email' || opt.action === 'do-not-use').length;
 
   const handleRowClick = (id: string) => {
+    // Set as primary when clicking on row
+    onSetPrimary?.(id);
     onChange?.(id);
-    if (id === selectedId) {
-      onToggleOpen?.();
-    }
   };
 
   const handleAvatarClick = (e: React.MouseEvent) => {
@@ -250,10 +244,14 @@ export const EmailMailboxDropdown = ({
               onClick={() => handleMailboxCellClick(option.id)}
               title={option.isPrimary ? 'Primary email' : 'Click to set as primary'}
             >
-              <CircleAvatar
-                initial={option.initial || option.source.charAt(0).toUpperCase()}
-                isSelected={option.isPrimary || false}
-              />
+              {option.action === 'bad-email' ? (
+                <BadEmailIcon />
+              ) : (
+                <CircleAvatar
+                  initial={option.initial || option.source.charAt(0).toUpperCase()}
+                  isSelected={option.isPrimary || false}
+                />
+              )}
             </div>
           ))}
           {/* Add email cell */}
@@ -345,7 +343,7 @@ export const EmailMailboxDropdown = ({
               }}
             >
               <div className="email-mailbox__toggle-label">
-                {showBadEmails ? 'Hide' : 'Show'} bad emails ({badEmailsCount})
+                {showBadEmails ? 'Hide' : 'Show'} excluded ({badEmailsCount})
               </div>
             </div>
           )}
