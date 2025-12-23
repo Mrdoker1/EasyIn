@@ -3,5 +3,6 @@ export type {
   EmailMailboxOption, 
   EmailMailboxDropdownProps,
   EmailStatus,
-  EmailAction 
+  EmailAction,
+  EmailIssueType
 } from './EmailMailboxDropdown';

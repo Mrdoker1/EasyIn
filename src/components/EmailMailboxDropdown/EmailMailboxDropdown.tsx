@@ -4,6 +4,7 @@ import './EmailMailboxDropdown.css';
 
 export type EmailStatus = 'processing' | 'valid' | 'issue';
 export type EmailAction = 'do-not-use' | 'bad-email' | null;
+export type EmailIssueType = 'missing-domain' | 'invalid-domain' | 'other' | null;
 
 export type EmailMailboxOption = {
   id: string;
@@ -13,6 +14,8 @@ export type EmailMailboxOption = {
   status: EmailStatus;
   isPrimary?: boolean;
   action?: EmailAction;
+  issueType?: EmailIssueType;
+  domainValue?: string;
 };
 
 export type EmailMailboxDropdownProps = {
@@ -29,6 +32,7 @@ export type EmailMailboxDropdownProps = {
   onAddEmail?: (email: string) => void;
   onSetAction?: (id: string, action: EmailAction) => void;
   onToggleBadEmails?: () => void;
+  onDomainChange?: (id: string, domain: string) => void;
 };
 
 // Status Icons
@@ -95,11 +99,13 @@ export const EmailMailboxDropdown = ({
   onAddEmail,
   onSetAction,
   onToggleBadEmails,
+  onDomainChange,
 }: EmailMailboxDropdownProps) => {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [isAddingEmail, setIsAddingEmail] = useState(false);
   const [newEmailValue, setNewEmailValue] = useState('');
   const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const [expandedDomainId, setExpandedDomainId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
@@ -197,6 +203,15 @@ export const EmailMailboxDropdown = ({
     }
   };
 
+  const handleToggleDomainExpand = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setExpandedDomainId(expandedDomainId === id ? null : id);
+  };
+
+  const handleDomainChange = (id: string, domain: string) => {
+    onDomainChange?.(id, domain);
+  };
+
   if (!isOpen) {
     return (
       <div className="email-mailbox">
@@ -237,19 +252,51 @@ export const EmailMailboxDropdown = ({
         <div className="email-mailbox__mailbox-column email-mailbox__mailbox-column--expanded">
           {/* Regular emails */}
           {visibleOptions.filter(opt => !opt.action).map((option) => (
-            <div
-              key={option.id}
-              className={`email-mailbox__mailbox-cell ${
-                option.id === selectedId ? 'email-mailbox__mailbox-cell--selected' : ''
-              } ${option.isPrimary ? 'email-mailbox__mailbox-cell--primary' : ''}`}
-              onClick={() => handleMailboxCellClick(option.id)}
-              title={option.isPrimary ? 'Primary email' : 'Click to set as primary'}
-            >
-              <CircleAvatar
-                initial={option.initial || option.source.charAt(0).toUpperCase()}
-                isSelected={option.isPrimary || false}
-              />
-            </div>
+            <React.Fragment key={option.id}>
+              <div
+                className={`email-mailbox__mailbox-cell ${
+                  option.id === selectedId ? 'email-mailbox__mailbox-cell--selected' : ''
+                } ${option.isPrimary ? 'email-mailbox__mailbox-cell--primary' : ''} ${
+                  expandedDomainId === option.id ? 'email-mailbox__mailbox-cell--no-separator' : ''
+                }`}
+                onClick={(e) => {
+                  if (option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain')) {
+                    handleToggleDomainExpand(e, option.id);
+                  } else {
+                    handleMailboxCellClick(option.id);
+                  }
+                }}
+                title={
+                  option.status === 'issue' && option.issueType === 'missing-domain'
+                    ? 'Missing domain - click to add'
+                    : option.status === 'issue' && option.issueType === 'invalid-domain'
+                    ? 'Invalid domain - click to fix'
+                    : option.isPrimary 
+                    ? 'Primary email' 
+                    : 'Click to set as primary'
+                }
+                style={{ cursor: option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') ? 'pointer' : undefined }}
+              >
+                {option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') ? (
+                  <BadEmailIcon />
+                ) : (
+                  <CircleAvatar
+                    initial={option.initial || option.source.charAt(0).toUpperCase()}
+                    isSelected={option.isPrimary || false}
+                  />
+                )}
+              </div>
+              
+              {/* Connector cell when domain expansion is open */}
+              {expandedDomainId === option.id && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') && (
+                <div className="email-mailbox__mailbox-cell email-mailbox__mailbox-cell--domain-placeholder">
+                  <div className="email-mailbox__domain-connector">
+                    <div className="email-mailbox__connector-line"></div>
+                    <div className="email-mailbox__connector-dot"></div>
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           ))}
           
           {/* Add email cell */}
@@ -297,23 +344,53 @@ export const EmailMailboxDropdown = ({
           {showBadEmails && visibleOptions.filter(opt => opt.action).length > 0 && (
             <>
               {visibleOptions.filter(opt => opt.action).map((option) => (
-                <div
-                  key={option.id}
-                  className={`email-mailbox__mailbox-cell email-mailbox__mailbox-cell--excluded ${
-                    option.id === selectedId ? 'email-mailbox__mailbox-cell--selected' : ''
-                  } ${option.isPrimary ? 'email-mailbox__mailbox-cell--primary' : ''}`}
-                  onClick={() => handleMailboxCellClick(option.id)}
-                  title={option.isPrimary ? 'Primary email' : 'Click to set as primary'}
-                >
-                  {option.action === 'bad-email' ? (
-                    <BadEmailIcon />
-                  ) : (
-                    <CircleAvatar
-                      initial={option.initial || option.source.charAt(0).toUpperCase()}
-                      isSelected={option.isPrimary || false}
-                    />
+                <React.Fragment key={option.id}>
+                  <div
+                    className={`email-mailbox__mailbox-cell email-mailbox__mailbox-cell--excluded ${
+                      option.id === selectedId ? 'email-mailbox__mailbox-cell--selected' : ''
+                    } ${option.isPrimary ? 'email-mailbox__mailbox-cell--primary' : ''} ${
+                      expandedDomainId === option.id ? 'email-mailbox__mailbox-cell--no-separator' : ''
+                    }`}
+                    onClick={(e) => {
+                      if (option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain')) {
+                        handleToggleDomainExpand(e, option.id);
+                      } else {
+                        handleMailboxCellClick(option.id);
+                      }
+                    }}
+                    title={
+                      option.status === 'issue' && option.issueType === 'missing-domain'
+                        ? 'Missing domain - click to add'
+                        : option.status === 'issue' && option.issueType === 'invalid-domain'
+                        ? 'Invalid domain - click to fix'
+                        : option.isPrimary 
+                        ? 'Primary email' 
+                        : 'Click to set as primary'
+                    }
+                    style={{ cursor: option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') ? 'pointer' : undefined }}
+                  >
+                    {option.status === 'issue' && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') ? (
+                      <BadEmailIcon />
+                    ) : option.action === 'bad-email' ? (
+                      <BadEmailIcon />
+                    ) : (
+                      <CircleAvatar
+                        initial={option.initial || option.source.charAt(0).toUpperCase()}
+                        isSelected={option.isPrimary || false}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Connector cell when domain expansion is open */}
+                  {expandedDomainId === option.id && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') && (
+                    <div className="email-mailbox__mailbox-cell email-mailbox__mailbox-cell--domain-placeholder">
+                      <div className="email-mailbox__domain-connector">
+                        <div className="email-mailbox__connector-line"></div>
+                        <div className="email-mailbox__connector-dot"></div>
+                      </div>
+                    </div>
                   )}
-                </div>
+                </React.Fragment>
               ))}
             </>
           )}
@@ -321,34 +398,57 @@ export const EmailMailboxDropdown = ({
         <div className="email-mailbox__content-column">
           {/* Regular emails */}
           {visibleOptions.filter(opt => !opt.action).map((option, index, arr) => (
-            <div
-              key={option.id}
-              className={`email-mailbox__row ${
-                option.id === selectedId ? 'email-mailbox__row--selected' : ''
-              } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} email-mailbox__row--separator`}
-              onClick={() => handleRowClick(option.id)}
-            >
-              <div className="email-mailbox__row-content">
-                <div className="email-mailbox__source">
-                  {option.source}
-                  {option.isPrimary && <span className="email-mailbox__primary-badge">Primary</span>}
+            <React.Fragment key={option.id}>
+              <div
+                className={`email-mailbox__row ${
+                  option.id === selectedId ? 'email-mailbox__row--selected' : ''
+                } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} ${
+                  expandedDomainId !== option.id ? 'email-mailbox__row--separator' : ''
+                }`}
+                onClick={() => handleRowClick(option.id)}
+              >
+                <div className="email-mailbox__row-content">
+                  <div className="email-mailbox__source">
+                    {option.source}
+                    {option.isPrimary && <span className="email-mailbox__primary-badge">Primary</span>}
+                  </div>
+                  <div className="email-mailbox__email">{option.email}</div>
                 </div>
-                <div className="email-mailbox__email">{option.email}</div>
+                <div className="email-mailbox__row-actions">
+                  <button 
+                    ref={(el) => buttonRefs.current[option.id] = el}
+                    className="email-mailbox__action-button"
+                    onClick={(e) => handleMenuToggle(e, option.id)}
+                  >
+                    <svg width="3" height="13" viewBox="0 0 3 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="1.5" cy="1.5" r="1.5" fill="#9CA3AF"/>
+                      <circle cx="1.5" cy="6.5" r="1.5" fill="#9CA3AF"/>
+                      <circle cx="1.5" cy="11.5" r="1.5" fill="#9CA3AF"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <div className="email-mailbox__row-actions">
-                <button 
-                  ref={(el) => buttonRefs.current[option.id] = el}
-                  className="email-mailbox__action-button"
-                  onClick={(e) => handleMenuToggle(e, option.id)}
-                >
-                  <svg width="3" height="13" viewBox="0 0 3 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="1.5" cy="1.5" r="1.5" fill="#9CA3AF"/>
-                    <circle cx="1.5" cy="6.5" r="1.5" fill="#9CA3AF"/>
-                    <circle cx="1.5" cy="11.5" r="1.5" fill="#9CA3AF"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
+              
+              {/* Domain expansion */}
+              {expandedDomainId === option.id && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') && (
+                <div className="email-mailbox__domain-expansion">
+                  <div className="email-mailbox__domain-content">
+                    <div className="email-mailbox__domain-label">
+                      Domain
+                      <span className="email-mailbox__domain-hint">Fill this to fix email</span>
+                    </div>
+                    <input
+                      type="text"
+                      className="email-mailbox__domain-input"
+                      value={option.domainValue || ''}
+                      onChange={(e) => handleDomainChange(option.id, e.target.value)}
+                      placeholder="Enter domain"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           ))}
           
           {/* Add email row */}
@@ -408,36 +508,57 @@ export const EmailMailboxDropdown = ({
           {showBadEmails && visibleOptions.filter(opt => opt.action).length > 0 && (
             <>
               {visibleOptions.filter(opt => opt.action).map((option, index, arr) => (
-                <div
-                  key={option.id}
-                  className={`email-mailbox__row email-mailbox__row--excluded ${
-                    option.id === selectedId ? 'email-mailbox__row--selected' : ''
-                  } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} ${
-                    option.action ? 'email-mailbox__row--muted' : ''
-                  } ${index < arr.length - 1 ? 'email-mailbox__row--separator' : ''}`}
-                  onClick={() => handleRowClick(option.id)}
-                >
-                  <div className="email-mailbox__row-content">
-                    <div className="email-mailbox__source">
-                      {option.source}
-                      {option.isPrimary && <span className="email-mailbox__primary-badge">Primary</span>}
+                <React.Fragment key={option.id}>
+                  <div
+                    className={`email-mailbox__row email-mailbox__row--excluded ${
+                      option.id === selectedId ? 'email-mailbox__row--selected' : ''
+                    } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} ${
+                      option.action ? 'email-mailbox__row--muted' : ''
+                    } ${expandedDomainId !== option.id && index < arr.length - 1 ? 'email-mailbox__row--separator' : ''}`}
+                    onClick={() => handleRowClick(option.id)}
+                  >
+                    <div className="email-mailbox__row-content">
+                      <div className="email-mailbox__source">
+                        {option.source}
+                        {option.isPrimary && <span className="email-mailbox__primary-badge">Primary</span>}
+                      </div>
+                      <div className="email-mailbox__email">{option.email}</div>
                     </div>
-                    <div className="email-mailbox__email">{option.email}</div>
+                    <div className="email-mailbox__row-actions">
+                      <button 
+                        ref={(el) => buttonRefs.current[option.id] = el}
+                        className="email-mailbox__action-button"
+                        onClick={(e) => handleMenuToggle(e, option.id)}
+                      >
+                        <svg width="3" height="13" viewBox="0 0 3 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="1.5" cy="1.5" r="1.5" fill="#9CA3AF"/>
+                          <circle cx="1.5" cy="6.5" r="1.5" fill="#9CA3AF"/>
+                          <circle cx="1.5" cy="11.5" r="1.5" fill="#9CA3AF"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <div className="email-mailbox__row-actions">
-                    <button 
-                      ref={(el) => buttonRefs.current[option.id] = el}
-                      className="email-mailbox__action-button"
-                      onClick={(e) => handleMenuToggle(e, option.id)}
-                    >
-                      <svg width="3" height="13" viewBox="0 0 3 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="1.5" cy="1.5" r="1.5" fill="#9CA3AF"/>
-                        <circle cx="1.5" cy="6.5" r="1.5" fill="#9CA3AF"/>
-                        <circle cx="1.5" cy="11.5" r="1.5" fill="#9CA3AF"/>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+                  
+                  {/* Domain expansion for excluded emails */}
+                  {expandedDomainId === option.id && (option.issueType === 'missing-domain' || option.issueType === 'invalid-domain') && (
+                    <div className="email-mailbox__domain-expansion">
+                      <div className="email-mailbox__domain-content">
+                        <div className="email-mailbox__domain-label">
+                          Domain
+                          <span className="email-mailbox__domain-hint">Fill this to fix email</span>
+                        </div>
+                        <input
+                          type="text"
+                          className="email-mailbox__domain-input"
+                          value={option.domainValue || ''}
+                          onChange={(e) => handleDomainChange(option.id, e.target.value)}
+                          placeholder="Enter domain"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </>
           )}

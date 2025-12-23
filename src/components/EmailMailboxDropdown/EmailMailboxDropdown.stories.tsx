@@ -46,8 +46,8 @@ const defaultOptions: EmailMailboxOption[] = [
   { id: 'linkedin', source: 'LinkedIn', email: 'groupadmin@mail.com', initial: 'L', status: 'valid', isPrimary: true },
   { id: 'domain', source: 'Domain', email: 'admin@company.com', initial: 'D', status: 'valid' },
   { id: 'additional', source: 'Additional', email: 'info@additional.net', initial: 'A', status: 'processing' },
-  { id: 'overflow', source: 'Overflow', email: 'contact@overflow.io', initial: 'O', status: 'issue' },
-  { id: 'bad1', source: 'Old Email', email: 'old@deprecated.com', initial: 'O', status: 'valid', action: 'bad-email' },
+  { id: 'overflow', source: 'Overflow', email: 'contact@overflow.io', initial: 'O', status: 'issue', issueType: 'other' },
+  { id: 'bad1', source: 'Old Email', email: 'old@deprecated.com', initial: 'O', status: 'issue', issueType: 'missing-domain', domainValue: '', action: 'bad-email' },
   { id: 'bad2', source: 'Spam', email: 'spam@example.com', initial: 'S', status: 'valid', action: 'do-not-use' },
 ];
 
@@ -128,6 +128,12 @@ export const Interactive = {
         }}
         onToggleBadEmails={() => {
           setState({ ...state, showBadEmails: !state.showBadEmails });
+        }}
+        onDomainChange={(id, domain) => {
+          const updatedOptions = state.options.map(opt => 
+            opt.id === id ? { ...opt, domainValue: domain } : opt
+          );
+          setState({ ...state, options: updatedOptions });
         }}
       />
     );
