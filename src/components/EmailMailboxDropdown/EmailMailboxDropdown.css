@@ -148,7 +148,7 @@
   background: #1D1E20 !important;
 }
 
-.email-mailbox__mailbox-cell:not(:last-child)::after {
+.email-mailbox__mailbox-cell:not(:last-child):not(.email-mailbox__mailbox-cell--divider)::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -156,6 +156,30 @@
   right: 3px;
   height: 1px;
   background: #3A3C3E;
+}
+
+/* Divider cell for excluded section */
+.email-mailbox__mailbox-cell--divider {
+  height: 38px;
+  background: rgba(255, 208, 99, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease-out;
+}
+
+.email-mailbox__mailbox-cell--divider:hover {
+  background: rgba(255, 208, 99, 0.12);
+}
+
+.email-mailbox__mailbox-cell--divider::after {
+  background: #3A3C3E;
+}
+
+/* Excluded mailbox cells */
+.email-mailbox__mailbox-cell--excluded {
+  background: rgba(255, 208, 99, 0.05);
 }
 
 /* Circle Avatar - NEW (replaces dots/icons) */
@@ -317,6 +341,49 @@
 /* Row primary state */
 .email-mailbox__row--primary {
   position: relative;
+}
+
+/* Section divider for excluded emails */
+.email-mailbox__section-divider {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  padding-right: 14px;
+  background: rgba(255, 208, 99, 0.08);
+  position: relative;
+}
+
+.email-mailbox__section-divider::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #3A3C3E;
+}
+
+.email-mailbox__section-divider--clickable {
+  cursor: pointer;
+  transition: background 120ms ease-out;
+}
+
+.email-mailbox__section-divider--clickable:hover {
+  background: rgba(255, 208, 99, 0.12);
+}
+
+.email-mailbox__section-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 208, 99, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Excluded emails row */
+.email-mailbox__row--excluded {
+  background: rgba(255, 208, 99, 0.03);
 }
 
 /* Muted state for bad/do-not-use emails */

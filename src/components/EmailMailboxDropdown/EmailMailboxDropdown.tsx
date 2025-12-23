@@ -235,7 +235,8 @@ export const EmailMailboxDropdown = ({
       <label className="email-mailbox__label">{label}</label>
       <div className="email-mailbox__container email-mailbox__container--expanded">
         <div className="email-mailbox__mailbox-column email-mailbox__mailbox-column--expanded">
-          {visibleOptions.map((option) => (
+          {/* Regular emails */}
+          {visibleOptions.filter(opt => !opt.action).map((option) => (
             <div
               key={option.id}
               className={`email-mailbox__mailbox-cell ${
@@ -244,47 +245,87 @@ export const EmailMailboxDropdown = ({
               onClick={() => handleMailboxCellClick(option.id)}
               title={option.isPrimary ? 'Primary email' : 'Click to set as primary'}
             >
-              {option.action === 'bad-email' ? (
-                <BadEmailIcon />
-              ) : (
-                <CircleAvatar
-                  initial={option.initial || option.source.charAt(0).toUpperCase()}
-                  isSelected={option.isPrimary || false}
-                />
-              )}
+              <CircleAvatar
+                initial={option.initial || option.source.charAt(0).toUpperCase()}
+                isSelected={option.isPrimary || false}
+              />
             </div>
           ))}
+          
           {/* Add email cell */}
           <div className="email-mailbox__mailbox-cell email-mailbox__mailbox-cell--add">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 3.5V12.5M3.5 8H12.5" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </div>
-          {/* Toggle bad emails cell */}
+          
+          {/* Toggle/Divider cell for excluded */}
           {badEmailsCount > 0 && (
-            <div 
-              className={`email-mailbox__mailbox-cell email-mailbox__mailbox-cell--toggle ${showBadEmails ? 'email-mailbox__mailbox-cell--toggle-open' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleBadEmails?.();
-              }}
-              title={showBadEmails ? 'Hide bad emails' : 'Show bad emails'}
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 10L5 7M8 10L11 7" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
+            <>
+              {!showBadEmails ? (
+                <div 
+                  className="email-mailbox__mailbox-cell email-mailbox__mailbox-cell--toggle"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleBadEmails?.();
+                  }}
+                  title="Show bad emails"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 10L5 7M8 10L11 7" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              ) : (
+                <div 
+                  className="email-mailbox__mailbox-cell email-mailbox__mailbox-cell--divider"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleBadEmails?.();
+                  }}
+                  style={{ cursor: 'pointer' }}
+                  title="Hide excluded emails"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 10L5 7M8 10L11 7" stroke="rgba(255, 208, 99, 0.7)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" transform="rotate(180 8 8)"/>
+                  </svg>
+                </div>
+              )}
+            </>
+          )}
+          
+          {/* Excluded emails section */}
+          {showBadEmails && visibleOptions.filter(opt => opt.action).length > 0 && (
+            <>
+              {visibleOptions.filter(opt => opt.action).map((option) => (
+                <div
+                  key={option.id}
+                  className={`email-mailbox__mailbox-cell email-mailbox__mailbox-cell--excluded ${
+                    option.id === selectedId ? 'email-mailbox__mailbox-cell--selected' : ''
+                  } ${option.isPrimary ? 'email-mailbox__mailbox-cell--primary' : ''}`}
+                  onClick={() => handleMailboxCellClick(option.id)}
+                  title={option.isPrimary ? 'Primary email' : 'Click to set as primary'}
+                >
+                  {option.action === 'bad-email' ? (
+                    <BadEmailIcon />
+                  ) : (
+                    <CircleAvatar
+                      initial={option.initial || option.source.charAt(0).toUpperCase()}
+                      isSelected={option.isPrimary || false}
+                    />
+                  )}
+                </div>
+              ))}
+            </>
           )}
         </div>
         <div className="email-mailbox__content-column">
-          {visibleOptions.map((option, index) => (
+          {/* Regular emails */}
+          {visibleOptions.filter(opt => !opt.action).map((option, index, arr) => (
             <div
               key={option.id}
               className={`email-mailbox__row ${
                 option.id === selectedId ? 'email-mailbox__row--selected' : ''
-              } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} ${
-                option.action ? 'email-mailbox__row--muted' : ''
-              } ${index < visibleOptions.length - 1 || isAddingEmail || badEmailsCount > 0 ? 'email-mailbox__row--separator' : ''}`}
+              } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} email-mailbox__row--separator`}
               onClick={() => handleRowClick(option.id)}
             >
               <div className="email-mailbox__row-content">
@@ -309,9 +350,10 @@ export const EmailMailboxDropdown = ({
               </div>
             </div>
           ))}
+          
           {/* Add email row */}
           <div
-            className={`email-mailbox__row email-mailbox__row--add ${badEmailsCount > 0 ? 'email-mailbox__row--separator' : ''}`}
+            className="email-mailbox__row email-mailbox__row--add email-mailbox__row--separator"
             onClick={() => setIsAddingEmail(true)}
           >
             {isAddingEmail ? (
@@ -333,19 +375,71 @@ export const EmailMailboxDropdown = ({
               <div className="email-mailbox__add-label">Add email</div>
             )}
           </div>
-          {/* Toggle bad emails row */}
+          {/* Excluded section header / toggle */}
           {badEmailsCount > 0 && (
-            <div 
-              className="email-mailbox__row email-mailbox__row--toggle"
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleBadEmails?.();
-              }}
-            >
-              <div className="email-mailbox__toggle-label">
-                {showBadEmails ? 'Hide' : 'Show'} excluded ({badEmailsCount})
-              </div>
-            </div>
+            <>
+              {!showBadEmails ? (
+                <div 
+                  className="email-mailbox__row email-mailbox__row--toggle"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleBadEmails?.();
+                  }}
+                >
+                  <div className="email-mailbox__toggle-label">
+                    Show excluded ({badEmailsCount})
+                  </div>
+                </div>
+              ) : (
+                <div 
+                  className="email-mailbox__section-divider email-mailbox__section-divider--clickable"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleBadEmails?.();
+                  }}
+                >
+                  <span className="email-mailbox__section-label">Excluded ({badEmailsCount})</span>
+                </div>
+              )}
+            </>
+          )}
+          
+          {/* Excluded emails list */}
+          {showBadEmails && visibleOptions.filter(opt => opt.action).length > 0 && (
+            <>
+              {visibleOptions.filter(opt => opt.action).map((option, index, arr) => (
+                <div
+                  key={option.id}
+                  className={`email-mailbox__row email-mailbox__row--excluded ${
+                    option.id === selectedId ? 'email-mailbox__row--selected' : ''
+                  } ${option.isPrimary ? 'email-mailbox__row--primary' : ''} ${
+                    option.action ? 'email-mailbox__row--muted' : ''
+                  } ${index < arr.length - 1 ? 'email-mailbox__row--separator' : ''}`}
+                  onClick={() => handleRowClick(option.id)}
+                >
+                  <div className="email-mailbox__row-content">
+                    <div className="email-mailbox__source">
+                      {option.source}
+                      {option.isPrimary && <span className="email-mailbox__primary-badge">Primary</span>}
+                    </div>
+                    <div className="email-mailbox__email">{option.email}</div>
+                  </div>
+                  <div className="email-mailbox__row-actions">
+                    <button 
+                      ref={(el) => buttonRefs.current[option.id] = el}
+                      className="email-mailbox__action-button"
+                      onClick={(e) => handleMenuToggle(e, option.id)}
+                    >
+                      <svg width="3" height="13" viewBox="0 0 3 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="1.5" cy="1.5" r="1.5" fill="#9CA3AF"/>
+                        <circle cx="1.5" cy="6.5" r="1.5" fill="#9CA3AF"/>
+                        <circle cx="1.5" cy="11.5" r="1.5" fill="#9CA3AF"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
           )}
         </div>
       </div>
