@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import LinkedInProfile from '../LinkedInProfile/LinkedInProfile';
 import ExtensionSidebar, { LinkedInData } from '../ExtensionSidebar/ExtensionSidebar';
-import './LinkedInSandbox.css';
+import './SandboxLayout.css';
 
 interface ProfileSource {
   name: string;
@@ -14,7 +14,7 @@ interface ProfileSource {
   linkedinUrl: string;
 }
 
-interface LinkedInSandboxProps {
+interface SandboxLayoutProps {
   profile?: Partial<ProfileSource>;
 }
 
@@ -47,7 +47,7 @@ function extractSidebarData(profile: ProfileSource): LinkedInData {
   };
 }
 
-const LinkedInSandbox: React.FC<LinkedInSandboxProps> = ({ profile: profileOverride }) => {
+const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride }) => {
   const profile = { ...DEFAULT_PROFILE, ...profileOverride };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -112,4 +112,4 @@ const LinkedInSandbox: React.FC<LinkedInSandboxProps> = ({ profile: profileOverr
   );
 };
 
-export default LinkedInSandbox;
+export default SandboxLayout;
