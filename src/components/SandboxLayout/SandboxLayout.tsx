@@ -17,6 +17,7 @@ interface ProfileSource {
 interface SandboxLayoutProps {
   profile?: Partial<ProfileSource>;
   companies?: LinkedInData['companies'];
+  companySelectorMode?: 'multi' | 'single';
 }
 
 const DEFAULT_PROFILE: ProfileSource = {
@@ -48,7 +49,7 @@ function extractSidebarData(profile: ProfileSource): LinkedInData {
   };
 }
 
-const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride, companies }) => {
+const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride, companies, companySelectorMode = 'multi' }) => {
   const profile = { ...DEFAULT_PROFILE, ...profileOverride };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -108,6 +109,7 @@ const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride,
             profileData={sidebarData}
             isLoading={isLoading}
             onUpdate={handleUpdate}
+            companySelectorMode={companySelectorMode}
           />
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ExtensionSidebar.css';
 import CompanySelector, { CompanyOption, CompanySelection } from '../CompanySelector/CompanySelector';
+import CompanySelectorSingle from '../CompanySelectorSingle/CompanySelectorSingle';
 
 const DotsIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -45,6 +46,7 @@ interface ExtensionSidebarProps {
   profileData?: LinkedInData;
   isLoading?: boolean;
   onUpdate?: (data: LinkedInData) => void;
+  companySelectorMode?: 'multi' | 'single';
 }
 
 interface FieldRowProps {
@@ -90,6 +92,7 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
   profileData,
   isLoading = false,
   onUpdate,
+  companySelectorMode = 'multi',
 }) => {
   const [activeTab, setActiveTab] = useState<'properties' | 'conversations'>('properties');
   const [fields, setFields] = useState<LinkedInData>(profileData || {});
@@ -97,6 +100,7 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
   const [assocSearch, setAssocSearch] = useState('');
   const [assocOpen, setAssocOpen] = useState(false);
   const [companySelection, setCompanySelection] = useState<CompanySelection>({});
+  const [primaryCompanyId, setPrimaryCompanyId] = useState<string | null>(null);
 
   React.useEffect(() => {
     setFields(profileData || {});
@@ -173,11 +177,22 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
                   <span>Loading...</span>
                 </div>
               ) : fields.companies && fields.companies.length > 0 ? (
-                <CompanySelector
-                  companies={fields.companies}
-                  selection={companySelection}
-                  onChange={setCompanySelection}
-                />
+                companySelectorMode === 'single' ? (
+                  <CompanySelectorSingle
+                    companies={fields.companies}
+                    onConfirm={(companyId, positionId) => {
+                      console.log('Create & Associate:', companyId, positionId);
+                    }}
+                  />
+                ) : (
+                  <CompanySelector
+                    companies={fields.companies}
+                    selection={companySelection}
+                    onChange={setCompanySelection}
+                    primaryCompanyId={primaryCompanyId}
+                    onPrimaryChange={setPrimaryCompanyId}
+                  />
+                )
               ) : (
                 <>
                   <button

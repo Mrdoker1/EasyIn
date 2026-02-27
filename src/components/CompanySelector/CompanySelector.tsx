@@ -24,6 +24,8 @@ interface CompanySelectorProps {
   companies: CompanyOption[];
   selection: CompanySelection;
   onChange: (selection: CompanySelection) => void;
+  primaryCompanyId?: string | null;
+  onPrimaryChange?: (id: string | null) => void;
 }
 
 const ChevronIcon = ({ open }: { open: boolean }) => (
@@ -36,7 +38,14 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
   </svg>
 );
 
-const CompanySelector: React.FC<CompanySelectorProps> = ({ companies, selection, onChange }) => {
+const StarIcon = ({ filled }: { filled: boolean }) => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill={filled ? '#F59E0B' : 'none'}
+    stroke={filled ? '#F59E0B' : '#666'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+  </svg>
+);
+
+const CompanySelector: React.FC<CompanySelectorProps> = ({ companies, selection, onChange, primaryCompanyId, onPrimaryChange }) => {
   const [expanded, setExpanded] = useState<{ [id: string]: boolean }>({});
 
   const toggleExpand = (id: string) => {
@@ -86,6 +95,13 @@ const CompanySelector: React.FC<CompanySelectorProps> = ({ companies, selection,
     return acc + (s.company ? 1 : posCount > 0 ? 1 : 0);
   }, 0);
 
+  const handleStarClick = (e: React.MouseEvent, companyId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!onPrimaryChange) return;
+    onPrimaryChange(primaryCompanyId === companyId ? null : companyId);
+  };
+
   return (
     <div className="company-selector">
       {totalSelected > 0 && (
@@ -99,11 +115,13 @@ const CompanySelector: React.FC<CompanySelectorProps> = ({ companies, selection,
         const hasMultiplePositions = company.positions.length > 1;
         const companyChecked = isCompanyChecked(company.id);
         const indeterminate = isCompanyIndeterminate(company.id);
+        const isPrimary = primaryCompanyId === company.id;
+        const isActive = companyChecked || indeterminate;
 
         return (
           <div key={company.id} className="company-item">
             {/* Company row */}
-            <div className={`company-row ${companyChecked || indeterminate ? 'company-row--selected' : ''}`}>
+            <div className={`company-row ${isActive ? 'company-row--selected' : ''} ${isPrimary ? 'company-row--primary' : ''}`}>
               <label className="company-row__label">
                 <input
                   type="checkbox"
@@ -115,15 +133,27 @@ const CompanySelector: React.FC<CompanySelectorProps> = ({ companies, selection,
                   onChange={(e) => handleCompanyChange(company, e.target.checked)}
                 />
                 <span className="company-row__name">{company.name}</span>
+                {isPrimary && <span className="company-row__primary-badge">Primary</span>}
               </label>
-              {hasMultiplePositions && (
-                <button
-                  className="company-row__expand"
-                  onClick={() => toggleExpand(company.id)}
-                >
-                  <ChevronIcon open={isOpen} />
-                </button>
-              )}
+              <div className="company-row__actions">
+                {onPrimaryChange && isActive && (
+                  <button
+                    className={`company-row__star ${isPrimary ? 'company-row__star--active' : ''}`}
+                    onClick={(e) => handleStarClick(e, company.id)}
+                    title={isPrimary ? 'Remove primary' : 'Set as primary'}
+                  >
+                    <StarIcon filled={isPrimary} />
+                  </button>
+                )}
+                {hasMultiplePositions && (
+                  <button
+                    className="company-row__expand"
+                    onClick={() => toggleExpand(company.id)}
+                  >
+                    <ChevronIcon open={isOpen} />
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Positions (only shown when expanded, or always if single position) */}

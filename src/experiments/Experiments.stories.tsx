@@ -24,14 +24,15 @@ export const GraceEzeaghatise: Story = {
 };
 
 /**
- * CompanySelector experiment: after scraping the page, the COMPANY ASSOCIATIONS
- * section renders a nested checkbox list of companies and positions extracted
- * from the LinkedIn experience section — instead of injecting checkboxes into the DOM.
+ * Experiment 1 — Company Selector (multi)
+ *
+ * Replaces injected DOM checkboxes with a sidebar-native nested list.
+ * Supports multi-select, indeterminate state, and marking one company as Primary.
  *
  * Steps:
  * 1. Click "Scrape Page"
- * 2. Open the COMPANY ASSOCIATIONS section in the sidebar
- * 3. Select companies and/or individual positions
+ * 2. Expand COMPANY ASSOCIATIONS in the sidebar
+ * 3. Select companies/positions — star one as Primary
  */
 const GRACE_COMPANIES: CompanyOption[] = [
   {
@@ -61,8 +62,29 @@ const GRACE_COMPANIES: CompanyOption[] = [
 ];
 
 export const CompanySelectorExperiment: Story = {
-  name: 'Experiment: Company Selector',
+  name: 'Experiment 1: Company Selector',
   args: {
     companies: GRACE_COMPANIES,
+    companySelectorMode: 'multi',
+  },
+};
+
+/**
+ * Experiment 2 — Single Company (Create & Associate)
+ *
+ * Situation 2: creation is ON, user picks one company + position,
+ * then hits "Create & Associate" to trigger the creation flow.
+ *
+ * Steps:
+ * 1. Click "Scrape Page"
+ * 2. Select a company with a radio button
+ * 3. Pick a position if available
+ * 4. Click "Create & Associate"
+ */
+export const SingleCompanyCreation: Story = {
+  name: 'Experiment 2: Single Company Creation',
+  args: {
+    companies: GRACE_COMPANIES,
+    companySelectorMode: 'single',
   },
 };

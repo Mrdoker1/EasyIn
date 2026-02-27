@@ -1,0 +1,201 @@
+.css-single {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.css-single__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Company item */
+.css-item {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1D1E20;
+  border: 1px solid #3C4041;
+  transition: border-color 0.15s;
+}
+
+.css-item--selected {
+  border-color: #2DD4BF;
+}
+
+.css-item__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.css-item__row:hover {
+  background: #252628;
+}
+
+.css-item__name {
+  font-size: 13px;
+  color: #F5F7FA;
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Radio button */
+.css-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  border: 1.5px solid #4a4a4a;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.css-radio:checked {
+  border-color: #2DD4BF;
+  background: transparent;
+}
+
+.css-radio:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 7px;
+  height: 7px;
+  background: #2DD4BF;
+  border-radius: 50%;
+}
+
+.css-radio:hover:not(:checked) {
+  border-color: #2DD4BF;
+}
+
+.css-radio--small {
+  width: 13px;
+  height: 13px;
+  min-width: 13px;
+}
+
+.css-radio--small:checked::after {
+  width: 5px;
+  height: 5px;
+}
+
+/* Positions */
+.css-positions {
+  border-top: 1px solid #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+
+.css-position {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 28px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.css-position:hover {
+  background: #252628;
+}
+
+.css-position--selected {
+  background: #1a2e2c;
+}
+
+.css-position__title {
+  font-size: 12px;
+  color: #A0A7B5;
+}
+
+/* Inline confirm button */
+.css-inline-confirm {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: transparent;
+  color: #2DD4BF;
+  border: 1px solid #2DD4BF;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.css-inline-confirm:hover {
+  background: rgba(45, 212, 191, 0.1);
+}
+
+/* Confirmed state */
+.css-confirmed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1a2e2c;
+  border: 1px solid #2DD4BF;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.css-confirmed__icon {
+  font-size: 13px;
+  color: #2DD4BF;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.css-confirmed__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.css-confirmed__company {
+  font-size: 13px;
+  color: #F5F7FA;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.css-confirmed__position {
+  font-size: 11px;
+  color: #A0A7B5;
+}
+
+.css-confirmed__undo {
+  background: none;
+  border: none;
+  color: #2DD4BF;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.css-confirmed__undo:hover {
+  background: rgba(45, 212, 191, 0.1);
+}
