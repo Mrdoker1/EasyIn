@@ -16,6 +16,7 @@ interface ProfileSource {
 
 interface SandboxLayoutProps {
   profile?: Partial<ProfileSource>;
+  companies?: LinkedInData['companies'];
 }
 
 const DEFAULT_PROFILE: ProfileSource = {
@@ -47,7 +48,7 @@ function extractSidebarData(profile: ProfileSource): LinkedInData {
   };
 }
 
-const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride }) => {
+const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride, companies }) => {
   const profile = { ...DEFAULT_PROFILE, ...profileOverride };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,11 +61,13 @@ const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride 
     setSidebarData(undefined);
 
     setTimeout(() => {
-      setSidebarData(extractSidebarData(profile));
+      const data = extractSidebarData(profile);
+      if (companies) data.companies = companies;
+      setSidebarData(data);
       setIsLoading(false);
       setScraped(true);
     }, 1200);
-  }, [profile]);
+  }, [profile, companies]);
 
   const handleUpdate = useCallback((data: LinkedInData) => {
     setSidebarData(data);

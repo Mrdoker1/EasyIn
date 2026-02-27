@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ExtensionSidebar.css';
+import CompanySelector, { CompanyOption, CompanySelection } from '../CompanySelector/CompanySelector';
 
 const DotsIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -35,6 +36,7 @@ export interface LinkedInData {
   email?: string;
   school?: string;
   linkedinUrl?: string;
+  companies?: CompanyOption[];
 }
 
 type ConvoStatus = 'Closed' | 'Active' | 'Snooze';
@@ -94,6 +96,7 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
   const [convoStatus, setConvoStatus] = useState<ConvoStatus>('Active');
   const [assocSearch, setAssocSearch] = useState('');
   const [assocOpen, setAssocOpen] = useState(false);
+  const [companySelection, setCompanySelection] = useState<CompanySelection>({});
 
   React.useEffect(() => {
     setFields(profileData || {});
@@ -169,6 +172,12 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
                   <div className="spinner" />
                   <span>Loading...</span>
                 </div>
+              ) : fields.companies && fields.companies.length > 0 ? (
+                <CompanySelector
+                  companies={fields.companies}
+                  selection={companySelection}
+                  onChange={setCompanySelection}
+                />
               ) : (
                 <>
                   <button

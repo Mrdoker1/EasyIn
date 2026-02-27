@@ -12,6 +12,10 @@ const config = {
     "@storybook/addon-docs",
     "@storybook/addon-themes"
   ],
-  "framework": "@storybook/react-vite"
+  "framework": "@storybook/react-vite",
+  viteFinal(config) {
+    config.base = '/EasyIn/';
+    return config;
+  },
 };
 export default config;
