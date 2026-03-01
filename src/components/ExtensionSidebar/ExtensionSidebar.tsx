@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './ExtensionSidebar.css';
 import CompanySelector, { CompanyOption, CompanySelection } from '../CompanySelector/CompanySelector';
 import CompanySelectorSingle from '../CompanySelectorSingle/CompanySelectorSingle';
+import CompanyChip from '../CompanyChip/CompanyChip';
+import CompanyInlineSelector from '../CompanyInlineSelector/CompanyInlineSelector';
 
 const DotsIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -46,7 +48,19 @@ interface ExtensionSidebarProps {
   profileData?: LinkedInData;
   isLoading?: boolean;
   onUpdate?: (data: LinkedInData) => void;
-  companySelectorMode?: 'multi' | 'single';
+  /**
+   * multi    — Exp 1: checkbox multi-select in sidebar (default)
+   * single   — Exp 2: radio single-select with create & associate
+   * chip     — Exp 3: always-visible company chip, 1-click switch
+   * anchored — Exp 4: selection driven from LinkedIn profile page
+   * inline   — Exp 5: flat always-visible list, default pre-selected
+   */
+  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline';
+  /** Exp 4: company ID selected by clicking the LinkedIn experience section */
+  anchoredCompanyId?: string | null;
+  /** Exp 4: position ID selected in the sidebar */
+  anchoredPositionId?: string | null;
+  onAnchoredPositionChange?: (positionId: string) => void;
 }
 
 interface FieldRowProps {
@@ -88,11 +102,63 @@ const FieldRow: React.FC<FieldRowProps> = ({ label, value, icon, onChange }) => 
   );
 };
 
+const AnchoredCompanyDisplay: React.FC<{
+  companies: CompanyOption[];
+  anchoredCompanyId: string | null;
+  anchoredPositionId: string | null;
+  onPositionChange: (positionId: string) => void;
+}> = ({ companies, anchoredCompanyId, anchoredPositionId, onPositionChange }) => {
+  const company = companies.find((c) => c.id === anchoredCompanyId) ?? null;
+
+  if (!company) {
+    return (
+      <div className="anchored-empty">
+        <span className="anchored-empty__icon">←</span>
+        <span className="anchored-empty__text">Click a company in the Experience section to select it</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="anchored-selected">
+      <div className="anchored-chip">
+        <div className="anchored-chip__logo">
+          {company.name.substring(0, 2).toUpperCase()}
+        </div>
+        <div className="anchored-chip__info">
+          <span className="anchored-chip__name">{company.name}</span>
+          <span className="anchored-chip__sub">selected from page</span>
+        </div>
+        <span className="anchored-chip__badge">✓</span>
+      </div>
+      {company.positions.length > 0 && (
+        <div className="anchored-positions">
+          <span className="anchored-positions__label">Position</span>
+          <div className="anchored-positions__list">
+            {company.positions.map((pos) => (
+              <button
+                key={pos.id}
+                className={`anchored-pos-btn${anchoredPositionId === pos.id ? ' anchored-pos-btn--active' : ''}`}
+                onClick={() => onPositionChange(pos.id)}
+              >
+                {pos.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
   profileData,
   isLoading = false,
   onUpdate,
   companySelectorMode = 'multi',
+  anchoredCompanyId,
+  anchoredPositionId = null,
+  onAnchoredPositionChange,
 }) => {
   const [activeTab, setActiveTab] = useState<'properties' | 'conversations'>('properties');
   const [fields, setFields] = useState<LinkedInData>(profileData || {});
@@ -182,6 +248,27 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
                     companies={fields.companies}
                     onConfirm={(companyId, positionId) => {
                       console.log('Create & Associate:', companyId, positionId);
+                    }}
+                  />
+                ) : companySelectorMode === 'chip' ? (
+                  <CompanyChip
+                    companies={fields.companies}
+                    onChange={(companyId, positionId) => {
+                      console.log('Chip selected:', companyId, positionId);
+                    }}
+                  />
+                ) : companySelectorMode === 'anchored' ? (
+                  <AnchoredCompanyDisplay
+                    companies={fields.companies}
+                    anchoredCompanyId={anchoredCompanyId ?? null}
+                    anchoredPositionId={anchoredPositionId}
+                    onPositionChange={(id) => onAnchoredPositionChange?.(id)}
+                  />
+                ) : companySelectorMode === 'inline' ? (
+                  <CompanyInlineSelector
+                    companies={fields.companies}
+                    onChange={(companyId, positionId) => {
+                      console.log('Inline selected:', companyId, positionId);
                     }}
                   />
                 ) : (

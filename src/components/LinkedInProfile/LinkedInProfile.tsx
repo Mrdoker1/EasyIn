@@ -45,6 +45,10 @@ interface LinkedInProfileProps {
   skills?: Skill[];
   profileImage?: string;
   coverImage?: string;
+  /** Exp 4: ID of the currently-active experience company */
+  activeExperienceId?: string | null;
+  /** Exp 4: called when user clicks a company in the experience section */
+  onSelectExperience?: (experienceId: string) => void;
 }
 
 const LinkedInProfile: React.FC<LinkedInProfileProps> = ({
@@ -157,7 +161,9 @@ const LinkedInProfile: React.FC<LinkedInProfileProps> = ({
     { id: '6', name: 'User Research', endorsements: 32 }
   ],
   profileImage,
-  coverImage
+  coverImage,
+  activeExperienceId,
+  onSelectExperience,
 }) => {
   return (
     <div className="linkedin-profile">
@@ -205,8 +211,13 @@ const LinkedInProfile: React.FC<LinkedInProfileProps> = ({
       <section className="profile-section experience-section">
         <h2 className="section-title">Experience</h2>
         <div className="experience-list">
-          {experience.map((exp) => (
-            <div key={exp.id} className="experience-item">
+          {experience.map((exp) => {
+            const isActive = activeExperienceId === exp.id;
+            return (
+            <div
+              key={exp.id}
+              className={`experience-item${onSelectExperience ? ' experience-item--selectable' : ''}${isActive ? ' experience-item--active' : ''}`}
+            >
               {/* Logo — col 1, row 1 */}
               <div className="experience-logo">
                 {exp.companyLogo ? (
@@ -222,6 +233,16 @@ const LinkedInProfile: React.FC<LinkedInProfileProps> = ({
                 <h3 className="experience-company-name">{exp.company}</h3>
                 <p className="experience-total-duration">{exp.totalDuration}</p>
               </div>
+              {/* Select button — col 3, only when anchoring is enabled */}
+              {onSelectExperience && (
+                <button
+                  className={`experience-select-btn${isActive ? ' experience-select-btn--active' : ''}`}
+                  onClick={() => onSelectExperience(exp.id)}
+                  title={isActive ? 'Selected' : 'Select this company'}
+                >
+                  {isActive ? '✓ Selected' : '+ Select'}
+                </button>
+              )}
               {/* Positions — each pair (dot-col + content) auto-placed in next row */}
               {exp.positions.map((position, index) => (
                 <React.Fragment key={position.id}>
@@ -245,7 +266,8 @@ const LinkedInProfile: React.FC<LinkedInProfileProps> = ({
                 </React.Fragment>
               ))}
             </div>
-          ))}
+          );
+          })}
         </div>
       </section>
 

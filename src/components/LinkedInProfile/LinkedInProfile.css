@@ -423,3 +423,51 @@
     text-align: center;
   }
 }
+
+/* ── Experiment 4: Experience-Anchored Company Selection ────────── */
+
+.experience-item--selectable {
+  grid-template-columns: 48px 1fr auto;
+  transition: background 0.15s;
+  border-radius: 8px;
+  padding: 10px 8px;
+  margin: 0 -8px;
+}
+
+.experience-item--selectable:hover {
+  background: #f0faf9;
+}
+
+.experience-item--active {
+  background: #e6f7f5;
+  border-bottom-color: #99ddd6 !important;
+}
+
+/* Select button — grid col 3, aligned to company header row */
+.experience-select-btn {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  background: none;
+  border: 1.5px solid #00bfa5;
+  border-radius: 20px;
+  color: #00897b;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.experience-select-btn:hover {
+  background: #00bfa5;
+  color: #fff;
+}
+
+.experience-select-btn--active {
+  background: #00bfa5;
+  color: #fff;
+  border-color: #00bfa5;
+}

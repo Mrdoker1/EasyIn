@@ -17,7 +17,8 @@ interface ProfileSource {
 interface SandboxLayoutProps {
   profile?: Partial<ProfileSource>;
   companies?: LinkedInData['companies'];
-  companySelectorMode?: 'multi' | 'single';
+  /** multi | single | chip | anchored | inline */
+  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline';
 }
 
 const DEFAULT_PROFILE: ProfileSource = {
@@ -55,11 +56,16 @@ const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride,
   const [isLoading, setIsLoading] = useState(false);
   const [scraped, setScraped] = useState(false);
   const [sidebarData, setSidebarData] = useState<LinkedInData | undefined>(undefined);
+  // Exp 4: ID of the experience entry selected by clicking on the LinkedIn profile page
+  const [activeExperienceId, setActiveExperienceId] = useState<string | null>(null);
+  const [activePositionId, setActivePositionId] = useState<string | null>(null);
 
   const handleScrape = useCallback(() => {
     setIsLoading(true);
     setScraped(false);
     setSidebarData(undefined);
+    setActiveExperienceId(null);
+    setActivePositionId(null);
 
     setTimeout(() => {
       const data = extractSidebarData(profile);
@@ -101,6 +107,12 @@ const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride,
             headline={profile.headline}
             location={profile.location}
             connections={profile.connections}
+            activeExperienceId={companySelectorMode === 'anchored' ? activeExperienceId : undefined}
+            onSelectExperience={companySelectorMode === 'anchored' ? (id) => {
+              setActiveExperienceId(id);
+              const firstPosition = companies?.find((c) => c.id === id)?.positions[0]?.id ?? null;
+              setActivePositionId(firstPosition);
+            } : undefined}
           />
         </div>
 
@@ -110,6 +122,9 @@ const SandboxLayout: React.FC<SandboxLayoutProps> = ({ profile: profileOverride,
             isLoading={isLoading}
             onUpdate={handleUpdate}
             companySelectorMode={companySelectorMode}
+            anchoredCompanyId={companySelectorMode === 'anchored' ? activeExperienceId : undefined}
+            anchoredPositionId={companySelectorMode === 'anchored' ? activePositionId : undefined}
+            onAnchoredPositionChange={companySelectorMode === 'anchored' ? setActivePositionId : undefined}
           />
         </div>
       </div>

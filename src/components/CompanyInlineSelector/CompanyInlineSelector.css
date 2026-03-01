@@ -1,0 +1,422 @@
+.cis {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Collapsed chip (always visible) ───────────────────────── */
+.cis-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: #1a2e2c;
+  border: 1.5px solid #00bfa5;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+  color: #fff;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cis-chip:not(.cis-chip--open):hover {
+  background: #1f3532;
+}
+
+.cis-chip--open {
+  border-radius: 10px 10px 6px 6px;
+}
+
+.cis-chip__logo {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cis-chip__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cis-chip__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cis-chip__pos {
+  font-size: 11px;
+  color: #00bfa5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cis-chip__chevron {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* ── Timeline list ──────────────────────────────────────────── */
+.cis-list {
+  background: #1c1c1c;
+  border: 1.5px solid #2a2a2a;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 8px 10px 6px 10px;
+  display: flex;
+  flex-direction: column;
+  animation: cis-drop-in 0.12s ease;
+}
+
+@keyframes cis-drop-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Company entry ──────────────────────────────────────────── */
+.cis-entry {
+  display: flex;
+  gap: 8px;
+  min-height: 36px;
+}
+
+/* Extra gap between last position row and the next company row */
+.cis-entry--pos + .cis-entry:not(.cis-entry--pos) {
+  padding-top: 8px;
+}
+
+.cis-entry__spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  position: relative;
+  padding-top: 4px;
+}
+
+.cis-entry__logo {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #2e2e2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.3px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.cis-entry__logo--active {
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  color: #fff;
+}
+
+.cis-entry__line {
+  flex: 1;
+  width: 1.5px;
+  background: #2e2e2e;
+  margin: 3px 0 0 0;
+  min-height: 8px;
+}
+
+/* On position rows the line runs full height behind the checkbox */
+.cis-entry--pos .cis-entry__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1.5px;
+  transform: translateX(-50%);
+  margin: 0;
+  min-height: 0;
+  flex: none;
+}
+
+/* Extend the line to cover the padding-top gap before the next company row */
+.cis-entry--pos:has(+ .cis-entry:not(.cis-entry--pos)) .cis-entry__line {
+  bottom: -8px;
+}
+
+.cis-entry__body {
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cis-entry:last-child .cis-entry__body {
+  padding-bottom: 2px;
+}
+
+.cis-entry__company {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.1s;
+  margin-bottom: 2px;
+}
+
+.cis-entry__name-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.cis-entry__company:hover {
+  background: #252525;
+}
+
+.cis-entry__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #d1d5db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.cis-entry__company--active .cis-entry__name {
+  color: #fff;
+}
+
+.cis-entry__hint {
+  font-size: 10px;
+  color: #4b5563;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cis-entry__check-icon {
+  color: #00bfa5;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ── Position rows (flat siblings, dots on main spine) ────────── */
+.cis-entry--pos {
+  min-height: 26px;
+  /* spine must stretch so absolute line covers full row height */
+}
+
+.cis-entry--pos .cis-entry__spine {
+  justify-content: center; /* center checkbox vertically inside stretched spine */
+  align-self: stretch;
+  padding-top: 0;
+}
+
+.cis-entry--pos .cis-entry__body {
+  padding: 4px 0;
+  justify-content: center;
+  align-self: center;
+}
+
+/* Checkbox sits centered in the 28px spine column */
+.cis-pos-check {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  border: 1.5px solid #444;
+  background: #1c1c1c;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, border-color 0.1s;
+  z-index: 1;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cis-pos-check--active {
+  background: #00bfa5;
+  border-color: #00bfa5;
+}
+
+.cis-pos-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 5px 6px;
+  font-size: 11px;
+  color: #6b7280;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+  transition: background 0.1s, color 0.1s;
+  width: 100%;
+  line-height: 1;
+}
+
+.cis-pos-btn:hover {
+  background: #252525;
+  color: #d1d5db;
+}
+
+.cis-pos-btn--active {
+  color: #00bfa5;
+  font-weight: 600;
+}
+
+
+.cis-row__btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 10px;
+  transition: background 0.12s;
+  color: #d1d5db;
+}
+
+.cis-row__btn:hover {
+  background: #252525;
+}
+
+.cis-row--active .cis-row__btn {
+  background: #1a2e2c;
+  color: #fff;
+}
+
+/* Logo */
+.cis-row__logo {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #2e2e2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.cis-row--active .cis-row__logo {
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  color: #fff;
+}
+
+/* Info */
+.cis-row__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cis-row__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cis-row__meta {
+  font-size: 11px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cis-row__more {
+  background: #2e2e2e;
+  color: #9ca3af;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 0 5px;
+  line-height: 16px;
+  flex-shrink: 0;
+}
+
+/* Checkmark */
+.cis-row__check {
+  color: #00bfa5;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ── Position pills ──────────────────────────────────────────── */
+.cis-positions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 10px 8px 54px;
+}
+
+.cis-pos {
+  background: none;
+  border: 1px solid #2e2e2e;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  font-family: inherit;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.1s;
+}
+
+.cis-pos:hover {
+  background: #252525;
+  color: #d1d5db;
+  border-color: #3a3a3a;
+}
+
+.cis-pos--active {
+  background: #1a2e2c;
+  color: #00bfa5;
+  border-color: #00bfa5;
+  font-weight: 600;
+}

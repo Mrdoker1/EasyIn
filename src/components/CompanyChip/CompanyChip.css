@@ -1,0 +1,200 @@
+.company-chip-wrap {
+  position: relative;
+}
+
+/* ── Main chip (always visible) ────────────────────────────────── */
+.company-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: #232323;
+  border: 1.5px solid #2e2e2e;
+  border-radius: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  color: #fff;
+}
+
+.company-chip:hover,
+.company-chip--open {
+  border-color: #00bfa5;
+  background: #1a2e2c;
+}
+
+.company-chip__logo {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.company-chip__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.company-chip__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.company-chip__position {
+  font-size: 11px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.company-chip__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.company-chip__count {
+  background: #1a2e2c;
+  color: #00bfa5;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 1px 6px;
+  line-height: 16px;
+}
+
+/* ── Dropdown ───────────────────────────────────────────────────── */
+.company-chip__dropdown {
+  margin-top: 4px;
+  background: #232323;
+  border: 1.5px solid #2e2e2e;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: chip-drop-in 0.12s ease;
+}
+
+@keyframes chip-drop-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Option row ────────────────────────────────────────────────── */
+.chip-option {
+  border-bottom: 1px solid #2e2e2e;
+}
+.chip-option:last-child {
+  border-bottom: none;
+}
+
+.chip-option__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 9px 12px;
+  cursor: pointer;
+  color: #d1d5db;
+  text-align: left;
+  transition: background 0.1s;
+}
+.chip-option__row:hover {
+  background: #2a2a2a;
+}
+.chip-option--active .chip-option__row {
+  background: #1a2e2c;
+  color: #fff;
+}
+
+.chip-option__logo {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.chip-option__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chip-option__name {
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-option__sub {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.chip-option__check {
+  color: #00bfa5;
+  flex-shrink: 0;
+}
+
+/* ── Position pills ────────────────────────────────────────────── */
+.chip-option__positions {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 12px 8px 52px;
+}
+
+.chip-pos {
+  background: none;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #9ca3af;
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.1s;
+}
+.chip-pos:hover {
+  background: #2a2a2a;
+  color: #fff;
+  border-color: #4a4a4a;
+}
+.chip-pos--active {
+  background: #1a2e2c;
+  color: #00bfa5;
+  border-color: #00bfa5;
+}

@@ -437,3 +437,144 @@
 .create-btn:hover {
   background-color: #00a896;
 }
+
+/* ── Anchored company display (Experiment 4) ─────────────────── */
+.anchored-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #1e1e1e;
+  border: 1.5px dashed #3a3a3a;
+  border-radius: 10px;
+  padding: 12px;
+  color: #6b7280;
+}
+
+.anchored-empty__icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.anchored-empty__text {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.anchored-selected {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.anchored-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a2e2c;
+  border: 1.5px solid #00bfa5;
+  border-radius: 10px;
+  padding: 10px 12px;
+  animation: chip-drop-in 0.15s ease;
+}
+
+.anchored-chip__logo {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.anchored-chip__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.anchored-chip__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anchored-chip__sub {
+  font-size: 11px;
+  color: #00bfa5;
+}
+
+.anchored-chip__badge {
+  background: #00bfa5;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.anchored-positions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.anchored-positions__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.anchored-positions__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.anchored-pos-btn {
+  background: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: #9ca3af;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 7px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s;
+}
+
+.anchored-pos-btn:hover {
+  background: #2a2a2a;
+  color: #fff;
+  border-color: #4a4a4a;
+}
+
+.anchored-pos-btn--active {
+  background: #1a2e2c;
+  color: #00bfa5;
+  border-color: #00bfa5;
+  font-weight: 600;
+}
+
+@keyframes chip-drop-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
