@@ -164,3 +164,39 @@ export const InlineFlatList: Story = {
     companySelectorMode: 'inline',
   },
 };
+
+/**
+ * Experiment 6: Standard Cards — Company associations displayed as standard
+ * fixed-height field rows (same UI kit as Contact Properties). Company logo
+ * (initials) replaces the shield icon. Clicking a row opens company properties.
+ * Job title visible in the value area.
+ */
+export const StandardCards: Story = {
+  name: 'Experiment 6: Standard Cards',
+  args: {
+    companies: GRACE_COMPANIES,
+    companySelectorMode: 'standard',
+  },
+};
+
+/**
+ * Experiment 7: Position Dropdown Cards — One standard card per company under
+ * COMPANY ASSOCIATIONS. Clicking the logo on a multi-position company opens an
+ * inline dropdown to pick the active position. Single-position companies are
+ * selected directly on logo click. The active company is highlighted with a
+ * teal logo gradient and a primary dot next to the position name.
+ *
+ * Steps:
+ * 1. Click "Scrape Page"
+ * 2. Observe one card per company — first company is primary (teal logo)
+ * 3. Click the logo of a multi-position company to open the position picker
+ * 4. Pick a position — that company becomes primary
+ * 5. Click the logo of a single-position company — it becomes primary instantly
+ */
+export const PositionDropdownCards: Story = {
+  name: 'Experiment 7: Position Dropdown Cards',
+  args: {
+    companies: GRACE_COMPANIES,
+    companySelectorMode: 'dropdown',
+  },
+};

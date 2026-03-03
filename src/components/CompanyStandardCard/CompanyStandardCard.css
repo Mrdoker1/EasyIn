@@ -1,0 +1,468 @@
+/* ── Root ──────────────────────────────────────────────────── */
+.csc {
+  position: relative;
+}
+
+/* ── Section header (card view only) ──────────────────────── */
+.csc-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.csc-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.csc-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.csc-edit-btn {
+  font-size: 11px;
+  font-weight: 500;
+  color: #00bfa5;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+
+.csc-edit-btn:hover {
+  background: rgba(0, 191, 165, 0.1);
+}
+
+/* ── Card ──────────────────────────────────────────────────── */
+.csc-card-outer {
+  border: 1px solid #3C4041;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1D1E20;
+}
+
+.csc-card {
+  display: flex;
+  align-items: center;
+  height: 38px;
+}
+
+.csc-card__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 38px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #2DD4BF;
+  background: linear-gradient(215deg, rgba(76,155,141,0.15) -62%, rgba(76,155,141,0.00) 123%);
+  border-right: 1px solid #3C4041;
+}
+
+.csc-card__body {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0 10px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+}
+
+.csc-card__name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #F5F7FA;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.csc-card__subtitle {
+  font-size: 10px;
+  color: #9CA3AF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+/* Info icon */
+.csc-card__info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-height: 38px;
+  background: none;
+  border: none;
+  color: #4B5563;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.1s;
+}
+
+.csc-card__info:hover,
+.csc-card__info--active {
+  color: #00bfa5;
+}
+
+/* Info icon */
+.csc-card__info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  min-height: 38px;
+  background: none;
+  border: none;
+  color: #4B5563;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.1s;
+}
+
+.csc-card__info:hover,
+.csc-card__info--active {
+  color: #00bfa5;
+}
+
+.csc-card__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 38px;
+  background: none;
+  border: none;
+  color: #4B5563;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.csc-card__chevron:hover {
+  color: #9ca3af;
+}
+
+/* ── Job title tooltip ─────────────────────────────────────── */
+.csc-tooltip {
+  border-top: 1px solid #2a2a2a;
+  padding: 8px 12px 10px;
+  background: #1a1a1a;
+  animation: csc-fade 0.1s ease;
+}
+
+@keyframes csc-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.csc-tooltip__label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #4b5563;
+  margin-bottom: 5px;
+}
+
+.csc-tooltip__item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #9ca3af;
+  padding: 2px 0;
+}
+
+.csc-tooltip__item--active {
+  color: #00bfa5;
+}
+
+/* ── Slide panels ──────────────────────────────────────────── */
+.csc-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: csc-slide-in 0.15s ease;
+}
+
+@keyframes csc-slide-in {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.csc-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csc-panel__back {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a2a;
+  border: none;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.1s, color 0.1s;
+}
+
+.csc-panel__back:hover {
+  background: #333;
+  color: #fff;
+}
+
+.csc-panel__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+/* Properties */
+.csc-panel__company-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #1c1c1c;
+  border: 1px solid #3C4041;
+  border-radius: 8px;
+}
+
+.csc-panel__logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.csc-panel__company-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.csc-panel__company-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.csc-panel__company-pos {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.csc-panel__props {
+  background: #1c1c1c;
+  border: 1px solid #3C4041;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.csc-panel__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #242424;
+}
+
+.csc-panel__row:last-child {
+  border-bottom: none;
+}
+
+.csc-panel__prop-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.csc-panel__prop-value {
+  font-size: 11px;
+  color: #d1d5db;
+  text-align: right;
+}
+
+/* ── Edit list ─────────────────────────────────────────────── */
+.csc-edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csc-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #1D1E20;
+  border: 1px solid #3C4041;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.csc-edit-row:hover {
+  background: #232323;
+}
+
+.csc-edit-row--selected {
+  border-color: #00bfa5;
+  background: #1a2e2c;
+}
+
+.csc-edit-row__logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: #2e2e2e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+}
+
+.csc-edit-row__logo--active {
+  background: linear-gradient(135deg, #007a6b 0%, #00bfa5 100%);
+  color: #fff;
+}
+
+.csc-edit-row__name {
+  flex: 1;
+  font-size: 12px;
+  color: #d1d5db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.csc-edit-row--selected .csc-edit-row__name {
+  color: #fff;
+  font-weight: 600;
+}
+
+.csc-edit-row__check {
+  color: #00bfa5;
+  flex-shrink: 0;
+}
+
+/* Positions picker */
+.csc-edit-positions {
+  background: #1a1a1a;
+  border: 1px solid #3C4041;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.csc-edit-positions__label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #4b5563;
+  margin-bottom: 7px;
+}
+
+.csc-edit-positions__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.csc-edit-pos-btn {
+  font-size: 11px;
+  color: #9ca3af;
+  background: #232323;
+  border: 1px solid #3C4041;
+  border-radius: 20px;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: border-color 0.1s, color 0.1s, background 0.1s;
+}
+
+.csc-edit-pos-btn--active {
+  color: #00bfa5;
+  border-color: #00bfa5;
+  background: rgba(0, 191, 165, 0.08);
+}
+
+.csc-edit-positions__single {
+  font-size: 12px;
+  color: #d1d5db;
+}
+
+.csc-edit-save {
+  width: 100%;
+  padding: 9px;
+  background: #00bfa5;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.csc-edit-save:hover {
+  background: #00a896;
+}
+
+.csc-edit-save:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Toast ─────────────────────────────────────────────────── */
+.csc-toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 7px 12px;
+  background: #1a2e2c;
+  border: 1px solid #00bfa5;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #00bfa5;
+  animation: csc-fade 0.2s ease;
+  pointer-events: none;
+}

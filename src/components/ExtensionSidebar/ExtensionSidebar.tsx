@@ -4,6 +4,8 @@ import CompanySelector, { CompanyOption, CompanySelection } from '../CompanySele
 import CompanySelectorSingle from '../CompanySelectorSingle/CompanySelectorSingle';
 import CompanyChip from '../CompanyChip/CompanyChip';
 import CompanyInlineSelector from '../CompanyInlineSelector/CompanyInlineSelector';
+import CompanyStandardCard from '../CompanyStandardCard/CompanyStandardCard';
+import CompanyPositionCard from '../CompanyPositionCard/CompanyPositionCard';
 
 const DotsIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -26,6 +28,18 @@ const ChevronIcon = ({ open }: { open: boolean }) => (
     style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.15s' }}
   >
     <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
+const ChevronLeftIcon = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
   </svg>
 );
 
@@ -54,8 +68,10 @@ interface ExtensionSidebarProps {
    * chip     — Exp 3: always-visible company chip, 1-click switch
    * anchored — Exp 4: selection driven from LinkedIn profile page
    * inline   — Exp 5: flat always-visible list, default pre-selected
+   * standard  — Exp 6: standard field-row cards with company initials logo
+   * dropdown  — Exp 7: one card per company, logo click picks position via dropdown
    */
-  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline';
+  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline' | 'standard' | 'dropdown';
   /** Exp 4: company ID selected by clicking the LinkedIn experience section */
   anchoredCompanyId?: string | null;
   /** Exp 4: position ID selected in the sidebar */
@@ -167,6 +183,31 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
   const [assocOpen, setAssocOpen] = useState(false);
   const [companySelection, setCompanySelection] = useState<CompanySelection>({});
   const [primaryCompanyId, setPrimaryCompanyId] = useState<string | null>(null);
+  const [companyPickerOpen, setCompanyPickerOpen] = useState(false);
+  const [standardPrimaryId, setStandardPrimaryId] = useState<string>(
+    profileData?.companies?.[0]?.id ?? ''
+  );
+  const [standardPositionId, setStandardPositionId] = useState<string | null>(
+    profileData?.companies?.[0]?.positions[0]?.id ?? null
+  );
+  // Temp state inside picker overlay
+  const [pickerCompanyId, setPickerCompanyId] = useState<string>('');
+  const [pickerPositionId, setPickerPositionId] = useState<string | null>(null);
+
+  // Exp 7: dropdown mode state
+  const [dropdownPrimaryId, setDropdownPrimaryId] = useState<string>(
+    profileData?.companies?.[0]?.id ?? ''
+  );
+  const [dropdownPositionsMap, setDropdownPositionsMap] = useState<Record<string, string>>(
+    () => Object.fromEntries(
+      (profileData?.companies ?? []).map((c) => [c.id, c.positions[0]?.id ?? ''])
+    )
+  );
+
+  const handleDropdownSelect = (companyId: string, positionId: string) => {
+    setDropdownPrimaryId(companyId);
+    setDropdownPositionsMap((prev) => ({ ...prev, [companyId]: positionId }));
+  };
 
   React.useEffect(() => {
     setFields(profileData || {});
@@ -174,6 +215,12 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
 
   const handleChange = (key: keyof LinkedInData, value: string) => {
     setFields((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const openCompanyPicker = () => {
+    setPickerCompanyId(standardPrimaryId);
+    setPickerPositionId(standardPositionId);
+    setCompanyPickerOpen(true);
   };
 
   const statuses: ConvoStatus[] = ['Closed', 'Active', 'Snooze'];
@@ -210,6 +257,103 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
 
       {/* Content */}
       <div className="sidebar-content">
+        {/* Company picker overlay (standard mode) */}
+        {companyPickerOpen && companySelectorMode === 'standard' && fields.companies && (
+          <div className="assoc-overlay">
+            <div className="assoc-overlay__header">
+              <button className="assoc-overlay__back" onClick={() => setCompanyPickerOpen(false)}>
+                <ChevronLeftIcon />
+              </button>
+              <span className="assoc-overlay__title">COMPANY ASSOCIATIONS</span>
+            </div>
+            <p className="assoc-overlay__subtitle">Select the primary company for this contact.</p>
+            <div className="apk-list">
+              {fields.companies.map((company, ci) => {
+                const isCompanySelected = pickerCompanyId === company.id;
+                const isLastCompany = ci === fields.companies.length - 1;
+                const multiPos = company.positions.length > 1;
+                return (
+                  <React.Fragment key={company.id}>
+                    <div className="apk-entry">
+                      <div className="apk-entry__spine">
+                        <div className={`apk-entry__logo${isCompanySelected ? ' apk-entry__logo--active' : ''}`}>
+                          {company.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        {(!isLastCompany || multiPos) && <div className="apk-entry__line" />}
+                      </div>
+                      <div className="apk-entry__body">
+                        <button
+                          className={`apk-entry__company${isCompanySelected ? ' apk-entry__company--active' : ''}`}
+                          onClick={() => {
+                            setPickerCompanyId(company.id);
+                            const firstPos = company.positions[0]?.id ?? null;
+                            setPickerPositionId(firstPos);
+                            if (!multiPos) {
+                              setStandardPrimaryId(company.id);
+                              setStandardPositionId(firstPos);
+                              setCompanyPickerOpen(false);
+                            }
+                          }}
+                        >
+                          <div className="apk-entry__name-row">
+                            <span className="apk-entry__name">{company.name}</span>
+                            {isCompanySelected && (
+                              <span className="apk-entry__radio-dot" />
+                            )}
+                          </div>
+                          {!isCompanySelected && (
+                            <span className="apk-entry__hint">
+                              {company.positions.length === 1
+                                ? company.positions[0].title
+                                : `${company.positions.length} positions`}
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* always show all positions expanded */}
+                    {multiPos && company.positions.map((pos, pi) => {
+                      const isPosSelected = isCompanySelected && pickerPositionId === pos.id;
+                      const isLastPos = pi === company.positions.length - 1;
+                      return (
+                        <div key={pos.id} className="apk-entry apk-entry--pos">
+                          <div className="apk-entry__spine">
+                            <button
+                              className={`apk-pos-radio${isPosSelected ? ' apk-pos-radio--active' : ''}`}
+                              onClick={() => {
+                                setPickerCompanyId(company.id);
+                                setPickerPositionId(pos.id);
+                                setStandardPrimaryId(company.id);
+                                setStandardPositionId(pos.id);
+                                setCompanyPickerOpen(false);
+                              }}
+                            />
+                            {(!isLastPos || !isLastCompany) && <div className="apk-entry__line apk-entry__line--pos" />}
+                          </div>
+                          <div className="apk-entry__body">
+                            <button
+                              className={`apk-pos-btn${isPosSelected ? ' apk-pos-btn--active' : ''}`}
+                              onClick={() => {
+                                setPickerCompanyId(company.id);
+                                setPickerPositionId(pos.id);
+                                setStandardPrimaryId(company.id);
+                                setStandardPositionId(pos.id);
+                                setCompanyPickerOpen(false);
+                              }}
+                            >
+                              {pos.title}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
+        )}
         {activeTab === 'properties' && (
           <>
             {/* Convo Status */}
@@ -233,10 +377,23 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
 
             {/* Company Associations */}
             <div className="sidebar-section">
-              <div className="section-header">
-                <span className="section-label">COMPANY ASSOCIATIONS</span>
-                <button className="section-action thick-dots"><DotsIcon /></button>
-              </div>
+              {companySelectorMode === 'standard' ? (
+                <div className="section-header">
+                  <button
+                    className="section-header__clickable"
+                    onClick={() => openCompanyPicker()}
+                  >
+                    <span className="section-label">COMPANY ASSOCIATIONS</span>
+                    <span className="section-header__arrow"><ChevronLeftIcon /></span>
+                  </button>
+                  <button className="section-action thick-dots"><DotsIcon /></button>
+                </div>
+              ) : (
+                <div className="section-header">
+                  <span className="section-label">COMPANY ASSOCIATIONS</span>
+                  <button className="section-action thick-dots"><DotsIcon /></button>
+                </div>
+              )}
               {isLoading ? (
                 <div className="sidebar-loading">
                   <div className="spinner" />
@@ -271,6 +428,27 @@ const ExtensionSidebar: React.FC<ExtensionSidebarProps> = ({
                       console.log('Inline selected:', companyId, positionId);
                     }}
                   />
+                ) : companySelectorMode === 'standard' ? (
+                  <CompanyStandardCard
+                    key={standardPrimaryId + (standardPositionId ?? '')}
+                    companies={fields.companies}
+                    initialPrimaryId={standardPrimaryId}
+                    onChange={(companyId, positionId) => {
+                      console.log('Standard selected:', companyId, positionId);
+                    }}
+                  />
+                ) : companySelectorMode === 'dropdown' ? (
+                  <div className="cpc-list">
+                    {fields.companies.map((company) => (
+                      <CompanyPositionCard
+                        key={company.id}
+                        company={company}
+                        selectedPositionId={dropdownPositionsMap[company.id] ?? null}
+                        isPrimary={dropdownPrimaryId === company.id}
+                        onSelect={handleDropdownSelect}
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <CompanySelector
                     companies={fields.companies}

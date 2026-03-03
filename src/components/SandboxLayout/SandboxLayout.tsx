@@ -17,8 +17,8 @@ interface ProfileSource {
 interface SandboxLayoutProps {
   profile?: Partial<ProfileSource>;
   companies?: LinkedInData['companies'];
-  /** multi | single | chip | anchored | inline */
-  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline';
+  /** multi | single | chip | anchored | inline | standard | dropdown */
+  companySelectorMode?: 'multi' | 'single' | 'chip' | 'anchored' | 'inline' | 'standard' | 'dropdown';
 }
 
 const DEFAULT_PROFILE: ProfileSource = {
